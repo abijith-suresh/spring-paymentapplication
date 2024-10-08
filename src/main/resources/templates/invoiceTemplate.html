@@ -5,11 +5,8 @@
   <title>Invoice</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
-    .header, .section { display: flex; justify-content: space-between; }
-    .section { margin-top: 20px; display: flex; justify-content: space-between; }
-    .vendor { border: 1px solid #ddd; padding: 10px; margin-right: auto; }
-    .client { border: 1px solid #ddd; padding: 10px; margin-left: auto; }
-    .po-number { margin-top: 10px; }
+    .header, .section { margin-top: 20px; }
+    .vendor, .client { border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; }
     table { width: 100%; border-collapse: collapse; margin-top: 20px; }
     th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
     th { background-color: #f2f2f2; }
@@ -18,41 +15,46 @@
   </style>
 </head>
 <body>
-<div class="header">
-  <div>
-    <strong>Invoice Number:</strong> <span th:text="${invoiceNumber}"></span>
-  </div>
-  <div>
-    <strong>Date:</strong> <span th:text="${paymentDate}"></span>
-  </div>
-</div>
+<table class="header">
+  <tr>
+    <td>
+      <strong>Invoice Number:</strong> <span th:text="${invoiceNumber}"></span>
+    </td>
+    <td style="text-align: right;">
+      <strong>Date:</strong> <span th:text="${paymentDate}"></span>
+    </td>
+  </tr>
+</table>
 
-<div class="section">
-  <div class="vendor">
-    <strong>Vendor Details:</strong>
-    <p>Company Name: <span th:text="${vendorName}"></span></p>
-    <p>Address: <span th:text="${vendorAddress}"></span></p>
-    <p>Phone: <span th:text="${vendorNumber}"></span></p>
-  </div>
-  <div class="client">
-    <strong>Client Details:</strong>
-    <p>Name: <span th:text="${clientName}"></span></p>
-    <p>Address: <span th:text="${clientAddress}"></span></p>
-    <p>Phone: <span th:text="${clientNumber}"></span></p>
-    <div class="po-number">
-      <strong>PO Number:</strong> <span th:text="${poNumber}"></span>
-    </div>
-  </div>
-</div>
+<table class="section">
+  <tr>
+    <td class="vendor">
+      <strong>Vendor Details:</strong>
+      <p>Company Name: <span th:text="${vendorName}"></span></p>
+      <p>Address: <span th:text="${vendorAddress}"></span></p>
+      <p>Phone: <span th:text="${vendorNumber}"></span></p>
+    </td>
+    <td class="client">
+      <strong>Client Details:</strong>
+      <p>Name: <span th:text="${clientName}"></span></p>
+      <p>Address: <span th:text="${clientAddress}"></span></p>
+      <p>Phone: <span th:text="${clientNumber}"></span></p>
+      <div>
+        <strong>PO Number:</strong> <span th:text="${poNumber}"></span>
+      </div>
+    </td>
+  </tr>
+</table>
 
-<div class="section">
-  <div>
-    <strong>Bank Details:</strong>
-    <p>Target Bank Account: <span th:text="${targetBankAccount}"></span></p>
-    <p>Source Bank Account: <span th:text="${sourceBankAccount}"></span></p>
-    <p>TDS: <span th:text="${tds}"></span></p>
-  </div>
-</div>
+<table class="section">
+  <tr>
+    <td>
+      <strong>Bank Details:</strong>
+      <p>Target Bank Account: <span th:text="${targetBankAccount}"></span></p>
+      <p>Source Bank Account: <span th:text="${sourceBankAccount}"></span></p>
+    </td>
+  </tr>
+</table>
 
 <table>
   <thead>
@@ -69,6 +71,18 @@
     <td th:text="${item.quantity}"></td>
     <td th:text="${item.price}"></td>
     <td th:text="${item.total}"></td>
+  </tr>
+  <tr>
+    <td colspan="2" style="text-align: right;"><strong>Total Amount:</strong></td>
+    <td colspan="2" th:text="${totalAmount}" style="text-align: right;"></td>
+  </tr>
+  <tr>
+    <td colspan="2" style="text-align: right;"><strong>TDS Deduction:</strong></td>
+    <td colspan="2" th:text="${tdsAmount}" style="text-align: right;"></td>
+  </tr>
+  <tr>
+    <td colspan="2" style="text-align: right;"><strong>Net Amount:</strong></td>
+    <td colspan="2" th:text="${netAmount}" style="text-align: right;"></td>
   </tr>
   </tbody>
 </table>

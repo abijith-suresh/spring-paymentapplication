@@ -20,8 +20,17 @@ public class PaymentService {
     private PaymentRepository paymentRepository;
 
     public Payment initiatePayment(PaymentDto paymentDto) {
+
+        double totalAmount = calculateTotalAmount(paymentDto.getItems());
+
+        double tdsAmount = calculateTDS(totalAmount, paymentDto.getTds());
+
+        double netAmount = calculateNetAmount(totalAmount, tdsAmount);
+
         Payment payment = Payment.builder()
-                .amount(paymentDto.getAmount())
+                .totalAmount(totalAmount)
+                .tdsAmount(tdsAmount)
+                .netAmount(netAmount)
                 .currency(paymentDto.getCurrency())
                 .username(paymentDto.getUsername())
                 .poNumber(paymentDto.getPoNumber())
@@ -40,41 +49,65 @@ public class PaymentService {
                 .items(convertToItems(paymentDto.getItems())) // Convert ItemDTOs to Items
                 .build();
 
-        // Save the payment instance
         return paymentRepository.save(payment);
     }
 
     private List<Item> convertToItems(List<ItemDto> itemDTOs) {
-        // Convert the list of ItemDTOs to a list of Item objects
         return itemDTOs.stream()
                 .map(itemDTO -> new Item(itemDTO.getName(), itemDTO.getQuantity(), itemDTO.getPrice()))
                 .collect(Collectors.toList());
     }
 
-    // Method to initiate a list of payments
     public List<Payment> initiatePayments(List<PaymentDto> paymentsDto) {
-        List<Payment> paymentList = paymentsDto.stream().map(paymentDTO -> Payment.builder()
-                .amount(paymentDTO.getAmount())
-                .currency(paymentDTO.getCurrency())
-                .username(paymentDTO.getUsername())
-                .poNumber(paymentDTO.getPoNumber())
-                .invoiceNumber(paymentDTO.getInvoiceNumber())
-                .targetBankAccount(paymentDTO.getTargetBankAccount())
-                .tds(paymentDTO.getTds())
-                .sourceBankAccount(paymentDTO.getSourceBankAccount())
-                .status(paymentDTO.getStatus())
-                .paymentDate(paymentDTO.getPaymentDate())
-                .vendorName(paymentDTO.getVendorName())
-                .vendorAddress(paymentDTO.getVendorAddress())
-                .vendorNumber(paymentDTO.getVendorNumber())
-                .clientName(paymentDTO.getClientName())
-                .clientAddress(paymentDTO.getClientAddress())
-                .clientNumber(paymentDTO.getClientNumber())
-                .items(convertToItems(paymentDTO.getItems())) // Convert ItemDTOs to Items
-                .build()).collect(Collectors.toList());
+
+        List<Payment> paymentList = paymentsDto.stream().map(paymentDTO -> {
+
+            double totalAmount = calculateTotalAmount(paymentDTO.getItems());
+            double tdsAmount = calculateTDS(totalAmount, paymentDTO.getTds());
+            double netAmount = calculateNetAmount(totalAmount, tdsAmount);
+
+            return Payment.builder()
+                    .totalAmount(totalAmount)
+                    .tdsAmount(tdsAmount)
+                    .netAmount(netAmount)
+                    .currency(paymentDTO.getCurrency())
+                    .username(paymentDTO.getUsername())
+                    .poNumber(paymentDTO.getPoNumber())
+                    .invoiceNumber(paymentDTO.getInvoiceNumber())
+                    .targetBankAccount(paymentDTO.getTargetBankAccount())
+                    .tds(paymentDTO.getTds())
+                    .sourceBankAccount(paymentDTO.getSourceBankAccount())
+                    .status(paymentDTO.getStatus())
+                    .paymentDate(paymentDTO.getPaymentDate())
+                    .vendorName(paymentDTO.getVendorName())
+                    .vendorAddress(paymentDTO.getVendorAddress())
+                    .vendorNumber(paymentDTO.getVendorNumber())
+                    .clientName(paymentDTO.getClientName())
+                    .clientAddress(paymentDTO.getClientAddress())
+                    .clientNumber(paymentDTO.getClientNumber())
+                    .items(convertToItems(paymentDTO.getItems()))
+                    .build();
+        }).collect(Collectors.toList());
 
         return paymentRepository.saveAll(paymentList);
     }
+
+    private double calculateTotalAmount(List<ItemDto> items) {
+        return items.stream()
+                .mapToDouble(item -> item.getPrice() * item.getQuantity())
+                .sum();
+    }
+
+    private double calculateTDS(double totalAmount, int tdsPercentage) {
+        return (totalAmount * tdsPercentage) / 100;
+    }
+
+    private double calculateNetAmount(double totalAmount, double tdsAmount) {
+        return totalAmount - tdsAmount;
+    }
+
+
+
 
     // 1. Find pending payments
     public List<Payment> findPendingPayments() {
@@ -89,7 +122,7 @@ public class PaymentService {
     // 3. Find amount by invoice number
     public Double getAmountByInvoiceNumber(String invoiceNumber) {
         Payment payment = paymentRepository.findByInvoiceNumber(invoiceNumber);
-        return payment != null ? payment.getAmount() : 0.0;
+        return payment != null ? payment.getTotalAmount() : 0.0;
     }
 
     // 4. Find complete and pending payments by payment date
@@ -105,7 +138,6 @@ public class PaymentService {
         Optional<Payment> optionalPayment = paymentRepository.findById(id);
         if (optionalPayment.isPresent()) {
             Payment payment = optionalPayment.get();
-            payment.setAmount(paymentdto.getAmount());
             payment.setCurrency(paymentdto.getCurrency());
             payment.setUsername(paymentdto.getUsername());
             payment.setPoNumber(paymentdto.getPoNumber());

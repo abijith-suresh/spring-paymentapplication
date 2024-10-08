@@ -17,7 +17,7 @@ import java.util.List;
 public class Payment {
     @Id
     private String id;
-    private Double amount;
+    private Double totalAmount;
     private String currency;
     private String username;
     private String poNumber;
@@ -27,6 +27,8 @@ public class Payment {
     private int tds;
     private String status;
     private String paymentDate;
+    private double tdsAmount;
+    private double netAmount;
 
     // Vendor details
     private String vendorName;

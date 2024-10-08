@@ -28,15 +28,13 @@ public class PdfService {
         context.setVariable("poNumber", payment.getPoNumber());
         context.setVariable("targetBankAccount", payment.getTargetBankAccount());
         context.setVariable("sourceBankAccount", payment.getSourceBankAccount());
+        context.setVariable("tds", payment.getTds());
         context.setVariable("clientName", payment.getClientName());
         context.setVariable("clientAddress", payment.getClientAddress());
         context.setVariable("clientNumber", payment.getClientNumber());
         context.setVariable("vendorName", payment.getVendorName());
         context.setVariable("vendorAddress", payment.getVendorAddress());
         context.setVariable("vendorNumber", payment.getVendorNumber());
-        context.setVariable("netAmount", payment.getNetAmount());
-        context.setVariable("tdsAmount", payment.getTdsAmount());
-        context.setVariable("totalAmount", payment.getTotalAmount());
 
         context.setVariable("items", payment.getItems());
 

@@ -13,6 +13,9 @@ import java.util.List;
 @AllArgsConstructor
 public class PaymentDto {
 
+    @Min(value = 1, message = "Amount should be greater than 0")
+    private Double amount;
+
     @NotBlank(message = "Currency is required")
     private String currency;
 

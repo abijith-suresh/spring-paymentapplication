@@ -2,10 +2,14 @@ package com.example.payments.controller;
 
 import com.example.payments.dto.Paymentdto;
 import com.example.payments.model.Payment;
+import com.example.payments.repository.PaymentRepository;
 import com.example.payments.service.PaymentService;
+import com.example.payments.service.PdfService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +21,12 @@ import java.util.Map;
 public class PaymentController {
     @Autowired
     private PaymentService paymentService;
+
+    @Autowired
+    private PdfService pdfService;
+
+    @Autowired
+    private PaymentRepository paymentRepository;
 
     @PostMapping("/initiate")
     public ResponseEntity<Payment> initiatePayment(@RequestBody @Valid Paymentdto payment) {
@@ -61,5 +71,30 @@ public class PaymentController {
     public ResponseEntity<Void> deletePayment(@PathVariable String id) {
         paymentService.deletePayment(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/invoice/{invoiceNumber}")
+    public ResponseEntity<byte[]> generateInvoice(@PathVariable String invoiceNumber) {
+        // Fetch payment details using the invoice number
+        Payment payment = paymentRepository.findByInvoicenumber(invoiceNumber);
+        if (payment == null) {
+            return ResponseEntity.notFound().build(); // Return 404 if not found
+        }
+
+        try {
+            // Generate PDF
+            byte[] pdfBytes = pdfService.generateInvoicePdf(payment);
+
+            // Set headers for the response
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("attachment", "invoice_" + invoiceNumber + ".pdf");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(pdfBytes);
+        } catch (Exception e) {
+            throw new RuntimeException("Error generating PDF", e);
+        }
     }
 }

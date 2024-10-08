@@ -5,6 +5,7 @@ import com.example.payments.model.Payment;
 import com.example.payments.repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 public class PaymentService {
     @Autowired
     private PaymentRepository paymentRepository;
+
     public Payment initiatePayment(Paymentdto payment) {
         Payment p=Payment.builder()
                 .amount(payment.getAmount())

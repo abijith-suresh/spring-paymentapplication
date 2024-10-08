@@ -1,6 +1,6 @@
 package com.example.payments.controller;
 
-import com.example.payments.dto.Paymentdto;
+import com.example.payments.dto.PaymentDto;
 import com.example.payments.service.PaymentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -26,16 +26,16 @@ class PaymentControllerDiffblueTest {
     private PaymentService paymentService;
 
     /**
-     * Method under test: {@link PaymentController#initiatePayment(Paymentdto)}
+     * Method under test: {@link PaymentController#initiatePayment(PaymentDto)}
      */
     @Test
     void testInitiatePayment() throws Exception {
-        Paymentdto paymentdto = new Paymentdto();
+        PaymentDto paymentdto = new PaymentDto();
         paymentdto.setAmount(10.0d);
         paymentdto.setCurrency("GBP");
-        paymentdto.setInvoicenumber("42");
-        paymentdto.setPaymentdate("2020-03-01");
-        paymentdto.setPonumber("42");
+        paymentdto.setInvoiceNumber("42");
+        paymentdto.setPaymentDate("2020-03-01");
+        paymentdto.setPoNumber("42");
         paymentdto.setSourceBankAccount("3");
         paymentdto.setStatus("Status");
         paymentdto.setTargetBankAccount("3");

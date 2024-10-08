@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,11 +20,24 @@ public class Payment {
     private Double amount;
     private String currency;
     private String username;
-    private String ponumber;
-    private String invoicenumber;
+    private String poNumber;
+    private String invoiceNumber;
     private String targetBankAccount;
     private String sourceBankAccount;
     private int tds;
     private String status;
-    private String paymentdate;
+    private String paymentDate;
+
+    // Vendor details
+    private String vendorName;
+    private String vendorAddress;
+    private String vendorNumber;
+
+    // Client details
+    private String clientName;
+    private String clientAddress;
+    private String clientNumber;
+
+    // List of items
+    private List<Item> items;
 }

@@ -1,6 +1,6 @@
 package com.example.payments.controller;
 
-import com.example.payments.dto.Paymentdto;
+import com.example.payments.dto.PaymentDto;
 import com.example.payments.model.Payment;
 import com.example.payments.repository.PaymentRepository;
 import com.example.payments.service.PaymentService;
@@ -29,11 +29,11 @@ public class PaymentController {
     private PaymentRepository paymentRepository;
 
     @PostMapping("/initiate")
-    public ResponseEntity<Payment> initiatePayment(@RequestBody @Valid Paymentdto payment) {
+    public ResponseEntity<Payment> initiatePayment(@RequestBody @Valid PaymentDto payment) {
         return new ResponseEntity<>(paymentService.initiatePayment(payment), HttpStatus.OK);
     }
     @PostMapping("/bulk-initiate")
-    public ResponseEntity<List<Payment>> initiatePayments(@RequestBody @Valid List<Paymentdto> payments) {
+    public ResponseEntity<List<Payment>> initiatePayments(@RequestBody @Valid List<PaymentDto> payments) {
         return new ResponseEntity<>(paymentService.initiatePayments(payments), HttpStatus.OK);
     }
     // 1. Endpoint to find pending payments
@@ -62,7 +62,7 @@ public class PaymentController {
 
     // 5. Endpoint to edit payment
     @PutMapping("/edit/{id}")
-    public ResponseEntity<Payment> editPayment(@PathVariable String id, @RequestBody Paymentdto paymentdto) {
+    public ResponseEntity<Payment> editPayment(@PathVariable String id, @RequestBody PaymentDto paymentdto) {
         return new ResponseEntity<>(paymentService.editPayment(id, paymentdto), HttpStatus.OK);
     }
 
@@ -76,7 +76,7 @@ public class PaymentController {
     @GetMapping("/invoice/{invoiceNumber}")
     public ResponseEntity<byte[]> generateInvoice(@PathVariable String invoiceNumber) {
         // Fetch payment details using the invoice number
-        Payment payment = paymentRepository.findByInvoicenumber(invoiceNumber);
+        Payment payment = paymentRepository.findByInvoiceNumber(invoiceNumber);
         if (payment == null) {
             return ResponseEntity.notFound().build(); // Return 404 if not found
         }

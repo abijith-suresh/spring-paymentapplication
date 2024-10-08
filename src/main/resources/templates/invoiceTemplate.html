@@ -6,10 +6,9 @@
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
     .header, .section { display: flex; justify-content: space-between; }
-    .section { margin-top: 20px; }
-    .vendor-client { flex: 1; }
-    .vendor { border: 1px solid #ddd; padding: 10px; }
-    .client { border: 1px solid #ddd; padding: 10px; }
+    .section { margin-top: 20px; display: flex; justify-content: space-between; }
+    .vendor { border: 1px solid #ddd; padding: 10px; margin-right: auto; }
+    .client { border: 1px solid #ddd; padding: 10px; margin-left: auto; }
     .po-number { margin-top: 10px; }
     table { width: 100%; border-collapse: collapse; margin-top: 20px; }
     th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
@@ -31,17 +30,17 @@
 <div class="section">
   <div class="vendor">
     <strong>Vendor Details:</strong>
-    <p>Company Name: Vendor Company</p>
-    <p>Address: Vendor Address</p>
-    <p>Phone: Vendor Phone</p>
+    <p>Company Name: <span th:text="${vendorName}"></span></p>
+    <p>Address: <span th:text="${vendorAddress}"></span></p>
+    <p>Phone: <span th:text="${vendorNumber}"></span></p>
   </div>
   <div class="client">
     <strong>Client Details:</strong>
-    <p>Name: <span th:text="${username}"></span></p>
-    <p>Address: Client Address</p>
-    <p>Phone: Client Phone</p>
+    <p>Name: <span th:text="${clientName}"></span></p>
+    <p>Address: <span th:text="${clientAddress}"></span></p>
+    <p>Phone: <span th:text="${clientNumber}"></span></p>
     <div class="po-number">
-      <strong>PO Number:</strong> <span th:text="${ponumber}"></span>
+      <strong>PO Number:</strong> <span th:text="${poNumber}"></span>
     </div>
   </div>
 </div>

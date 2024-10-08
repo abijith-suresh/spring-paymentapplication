@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.example.payments.dto.Paymentdto;
+import com.example.payments.dto.PaymentDto;
 import com.example.payments.model.Payment;
 import com.example.payments.repository.PaymentRepository;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ class PaymentServiceDiffblueTest {
     private PaymentService paymentService;
 
     /**
-     * Method under test: {@link PaymentService#initiatePayment(Paymentdto)}
+     * Method under test: {@link PaymentService#initiatePayment(PaymentDto)}
      */
     @Test
     void testInitiatePayment() {
@@ -33,9 +33,9 @@ class PaymentServiceDiffblueTest {
         payment.setAmount(10.0d);
         payment.setCurrency("GBP");
         payment.setId("42");
-        payment.setInvoicenumber("42");
-        payment.setPaymentdate("2020-03-01");
-        payment.setPonumber("42");
+        payment.setInvoiceNumber("42");
+        payment.setPaymentDate("2020-03-01");
+        payment.setPoNumber("42");
         payment.setSourceBankAccount("3");
         payment.setStatus("Status");
         payment.setTargetBankAccount("3");
@@ -43,7 +43,7 @@ class PaymentServiceDiffblueTest {
         payment.setUsername("janedoe");
         when(paymentRepository.save(Mockito.<Payment>any())).thenReturn(payment);
         Payment actualInitiatePaymentResult = paymentService
-                .initiatePayment(new Paymentdto(10.0d, "GBP", "janedoe", "42", "42", "3", "3", 1, "Status", "2020-03-01"));
+                .initiatePayment(new PaymentDto(10.0d, "GBP", "janedoe", "42", "42", "3", "3", 1, "Status", "2020-03-01"));
         verify(paymentRepository).save(Mockito.<Payment>any());
         assertSame(payment, actualInitiatePaymentResult);
     }

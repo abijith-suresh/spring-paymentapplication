@@ -15,8 +15,8 @@ public interface PaymentRepository extends MongoRepository<Payment, String> {
     Double sumAllAmounts();
 
     // 3. Find by invoice number
-    Payment findByInvoicenumber(String invoiceNumber);
+    Payment findByInvoiceNumber(String invoiceNumber);
 
     // 4. Find by payment date and status
-    List<Payment> findByPaymentdateAndStatus(String paymentDate, String status);
+    List<Payment> findByPaymentDateAndStatus(String paymentDate, String status);
 }

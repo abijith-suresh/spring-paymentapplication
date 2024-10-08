@@ -1,4 +1,4 @@
-package com.example.payments.service;
+package com.example.payments.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

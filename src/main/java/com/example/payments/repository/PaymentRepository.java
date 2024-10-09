@@ -11,7 +11,7 @@ public interface PaymentRepository extends MongoRepository<Payment, String> {
     List<Payment> findByStatus(String status);
 
     // 2. Sum all amounts
-    @Aggregation(pipeline = { "{ '$group': { '_id': null, 'totalAmount': { '$sum': '$amount' } } } }" })
+    @Aggregation(pipeline = { "{ '$group': { '_id': null, 'totalAmount': { '$sum': '$totalAmount' } } } }" })
     Double sumAllAmounts();
 
     // 3. Find by invoice number
